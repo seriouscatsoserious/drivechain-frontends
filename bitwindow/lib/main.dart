@@ -20,6 +20,7 @@ import 'package:bitwindow/providers/wallet_provider.dart';
 import 'package:bitwindow/routing/router.dart';
 import 'package:bitwindow/widgets/address_list.dart';
 import 'package:bitwindow/widgets/hash_calculator_modal.dart';
+import 'package:bitwindow/widgets/merkle_tree_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -28,7 +29,7 @@ import 'package:logger/logger.dart';
 import 'package:sail_ui/config/sidechain_main.dart';
 import 'package:sail_ui/providers/price_provider.dart';
 import 'package:sail_ui/sail_ui.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+// import 'package:sentry_flutter/sentry_flutter.dart'; // Temporarily disabled
 import 'package:window_manager/window_manager.dart';
 
 void main(List<String> args) async {
@@ -165,24 +166,25 @@ Future<void> runMainWindow(Logger log, Directory applicationDir, File logFile) a
     // do absolutely nothing, probably no debug mode setting
   }
 
-  if (debugMode) {
-    log.i('Starting app with Sentry monitoring');
-    return await SentryFlutter.init(
-      (options) {
-        options.dsn = 'https://fb54f18383071d144bd00f6159827dc5@o1053156.ingest.us.sentry.io/4509152512180224';
-        options.tracesSampleRate = 0.0;
-        options.profilesSampleRate = 0.0;
-        options.recordHttpBreadcrumbs = false;
-        options.sampleRate = 1.0;
-        options.attachStacktrace = true;
-        options.enablePrintBreadcrumbs = false;
-        options.debug = false;
-      },
-      appRunner: () {
-        return runApp(SentryWidget(child: BitwindowApp(log: log)));
-      },
-    );
-  }
+  // Sentry temporarily disabled due to compilation issues
+  // if (debugMode) {
+  //   log.i('Starting app with Sentry monitoring');
+  //   return await SentryFlutter.init(
+  //     (options) {
+  //       options.dsn = 'https://fb54f18383071d144bd00f6159827dc5@o1053156.ingest.us.sentry.io/4509152512180224';
+  //       options.tracesSampleRate = 0.0;
+  //       options.profilesSampleRate = 0.0;
+  //       options.recordHttpBreadcrumbs = false;
+  //       options.sampleRate = 1.0;
+  //       options.attachStacktrace = true;
+  //       options.enablePrintBreadcrumbs = false;
+  //       options.debug = false;
+  //     },
+  //     appRunner: () {
+  //       return runApp(SentryWidget(child: BitwindowApp(log: log)));
+  //     },
+  //   );
+  // }
 
   log.i('Starting app without Sentry monitoring');
   return runApp(BitwindowApp(log: log));
@@ -233,6 +235,10 @@ void runMultiWindow(List<String> args, Logger log, Directory applicationDir, Fil
 
     case SubWindowTypes.hashCalculatorId:
       child = const HashCalculator();
+      break;
+
+    case SubWindowTypes.merkleTreeId:
+      child = const MerkleTreeDialog();
       break;
   }
 
@@ -410,6 +416,14 @@ class SubWindowTypes {
     // set width to half of screen size, full height
     defaultSize: Size(double.maxFinite / 2, double.maxFinite),
     defaultPosition: Offset(double.maxFinite / 2, 0),
+  );
+
+  static const String merkleTreeId = 'merkle_tree';
+  static var merkleTree = SailWindow(
+    identifier: merkleTreeId,
+    name: 'Merkle Tree Calculator',
+    defaultSize: Size(900, 700),
+    defaultPosition: Offset(150, 150),
   );
 }
 

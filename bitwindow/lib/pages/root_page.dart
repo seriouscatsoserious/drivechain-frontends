@@ -287,7 +287,10 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver, Window
                 ),
                 PlatformMenuItem(
                   label: 'Merkle Tree',
-                  onSelected: null,
+                  onSelected: () {
+                    final windowProvider = GetIt.I.get<WindowProvider>();
+                    windowProvider.open(SubWindowTypes.merkleTree);
+                  },
                 ),
                 PlatformMenuItem(
                   label: 'Signatures',
