@@ -2,6 +2,33 @@
 
 This guide provides comprehensive questions to assess a target codebase for porting the merkle calculator from the Drivechain/Bitcoin implementation.
 
+## Flutter/Dart Implementation Status
+
+✅ **COMPLETED**: A full Flutter/Dart implementation has been created in this repository with the following features:
+
+### Implementation Files
+- `lib/utils/merkle_tree.dart` - Core merkle tree computation logic
+- `lib/widgets/merkle_tree_dialog.dart` - Flutter UI dialog with tree visualization
+
+### Features Implemented
+- ✅ Double SHA-256 hashing (`sha256d` function)
+- ✅ Bitcoin's "duplicate-last-when-odd" behavior
+- ✅ RCB (Reversed Byte Order) support with toggle
+- ✅ Visual tree representation with node connections
+- ✅ Duplicate node indicators (red border with "DUP" label)
+- ✅ Interactive node selection
+- ✅ Copy merkle root to clipboard
+- ✅ Example transaction set
+- ✅ Paste from clipboard functionality
+
+### Known Issues
+- ⚠️ Minor pixel overflow on duplicate nodes with long hashes (cosmetic issue)
+- Can be fixed by conditionally hiding hash display for duplicate nodes
+
+### Integration Points
+- Added to Tools menu in `lib/pages/root_page.dart`
+- Registered as SubWindowType in window provider system
+
 ## 1. Core Dependencies & Infrastructure
 
 ### Hash Implementation
